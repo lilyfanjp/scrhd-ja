@@ -5,7 +5,7 @@ import time
 import signal
 
 import scrollphathd
-from scrollphathd.fonts import misaki_gothic
+import misaki_gothic
 
 print("""
 Scroll pHAT HD: Hello World
