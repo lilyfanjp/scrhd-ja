@@ -4,49 +4,47 @@ use strict;
 use Encode;
 local $_;
 
-print "data = {\n";
+print "# -*- coding: utf-8 -*-\ndata = {\n";
 while ($_ = <>) {
 	chomp;
-	next unless /^STARTCHAR /;
+	next unless /^STARTCHAR/;
 	my $encoding = 0;
 	my @bitmap = ();
-	while ($_ = <>) {
+	CHAR: while ($_ = <>) {
 		chomp;
 		if (/^ENCODING (\d+)/) {
 			$encoding = $1;
 		}
-		if (/^BITMAP/) {
-			for (my $i = 0 ; $i < 8 ; $i++) {
-				$_ = <>;
-				chomp;
-				push @bitmap, hex($_);
-			}
+		next unless /^BITMAP/;
+		while ($_ = <>) {
+			chomp;
+			last CHAR if /^ENDCHAR/;
+			push @bitmap, hex($_);
 		}
-		last if (/^ENDCHAR/);
 	}
 	if ($encoding == 0) {
 		print STDERR "No BITMAP found!\n";
 		next;
 	}
 	my $char = chr($encoding);
-	my $last = pop(@bitmap);
-	if ($last != 0) {
-		printf(STDERR "No clear line at bottom: %s\n", encode('utf-8', $char));
+	if (pop(@bitmap)) {
+		printf(STDERR "No clear bottom line at %s\n", encode('utf-8', $char));
 	}
-	my @lines = ();
-	foreach (@bitmap) {
-		my @bits = ();
-		if ($_ % 2) {
-			print(STDERR "LSB found: %X at %s\n", $_, encode('utf-8', $char));
+	my @glyph = ();
+	for (my $i = 0 ; $i < $#bitmap ; $i++) {
+		my $bits = $bitmap[$i];
+		my @line = ();
+		if ($bits % 2) {
+			printf(STDERR "LSB found at line %d of %s: %02X\n", $i, encode('utf-8', $char), $bits);
 		}
-		$_ >>= 1;
-		for (my $i = 0 ; $i < 7 ; $i++) {
-			unshift @bits, ($_ % 2 ? '0xff' : '0x00');
-			$_ >>= 1;
+		$bits >>= 1;
+		for (my $j = 0 ; $j < 7 ; $j++) {
+			unshift @line, ($bits % 2 ? '0xff' : '0x00');
+			$bits >>= 1;
 		}
-		push @lines, sprintf("[%s]", join(",", @bits));
+		push @glyph, sprintf('[%s]', join(',', @line));
 	}
-	printf("0x%08X: [%s], #%s\n", $encoding, join(",\n", @lines), encode('UTF-8', $char));
+	printf("0x%08X: [%s], #%s\n", $encoding, join(",\n", @glyph), encode('utf-8', $char));
 }
 print "width = 7\nheight = 7\n";
 
