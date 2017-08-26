@@ -3,7 +3,8 @@
 
 import time
 import scrollphathd as scrhd
-from scrollphathd.fonts import misaki_gothic
+import misaki_gothic
+## from scrollphathd.fonts import misaki_gothic # if installed at dist-packages/scrollphathd/fonts
 
 print("""
 
