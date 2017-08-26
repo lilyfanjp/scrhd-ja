@@ -31,7 +31,7 @@ while ($_ = <>) {
 		printf(STDERR "No clear bottom line at %s\n", encode('utf-8', $char));
 	}
 	my @glyph = ();
-	foreach (@bitmap) {
+	foreach $_ (@bitmap) {
 		my @line = ();
 		if ($_ % 2) {
 			printf(STDERR "LSB found at %s: %02X\n", encode('utf-8', $char), $_);
