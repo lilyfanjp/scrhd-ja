@@ -31,16 +31,15 @@ while ($_ = <>) {
 		printf(STDERR "No clear bottom line at %s\n", encode('utf-8', $char));
 	}
 	my @glyph = ();
-	for (my $i = 0 ; $i < $#bitmap ; $i++) {
-		my $bits = $bitmap[$i];
+	foreach (@bitmap) {
 		my @line = ();
-		if ($bits % 2) {
-			printf(STDERR "LSB found at line %d of %s: %02X\n", $i, encode('utf-8', $char), $bits);
+		if ($_ % 2) {
+			printf(STDERR "LSB found at %s: %02X\n", encode('utf-8', $char), $_);
 		}
-		$bits >>= 1;
+		$_ >>= 1;
 		for (my $j = 0 ; $j < 7 ; $j++) {
-			unshift @line, ($bits % 2 ? '0xff' : '0x00');
-			$bits >>= 1;
+			unshift @line, ($_ % 2 ? '0xff' : '0x00');
+			$_ >>= 1;
 		}
 		push @glyph, sprintf('[%s]', join(',', @line));
 	}
