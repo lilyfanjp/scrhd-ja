@@ -5,18 +5,18 @@ use Encode;
 local $_;
 
 print "# -*- coding: utf-8 -*-\ndata = {\n";
-while ($_ = <>) {
+while (<>) {
 	chomp;
 	next unless /^STARTCHAR/;
 	my $encoding = 0;
 	my @bitmap = ();
-	CHAR: while ($_ = <>) {
+	CHAR: while (<>) {
 		chomp;
 		if (/^ENCODING (\d+)/) {
 			$encoding = $1;
 		}
 		next unless /^BITMAP/;
-		while ($_ = <>) {
+		while (<>) {
 			chomp;
 			last CHAR if /^ENDCHAR/;
 			push @bitmap, hex($_);
@@ -31,7 +31,7 @@ while ($_ = <>) {
 		printf(STDERR "No clear bottom line at %s\n", encode('utf-8', $char));
 	}
 	my @glyph = ();
-	foreach $_ (@bitmap) {
+	foreach (@bitmap) {
 		my @line = ();
 		if ($_ % 2) {
 			printf(STDERR "LSB found at %s: %02X\n", encode('utf-8', $char), $_);
