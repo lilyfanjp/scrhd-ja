@@ -8,7 +8,7 @@ import misaki_gothic
 
 print("""
 
-Scrolls japanese test" across the screen in a 7x7 pixel large font.
+Scrolls japanese texts across the screen in a 7x7 pixel large font.
 Press Ctrl+C to exit!
 
 """)
