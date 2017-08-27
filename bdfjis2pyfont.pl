@@ -49,5 +49,5 @@ while (<>) {
 	}
 	printf("0x%08X: [%s], #%s:%s\n", ord($char), join(",\n", @glyph), $startchar, encode('utf-8', $char));
 }
-print "width = 7\nheight = 7\n";
+print "}\nwidth = 7\nheight = 7\n";
 
