@@ -15,7 +15,6 @@ Scroll pHAT HD を使うスクリプトと同じディレクトリに misaki_got
 `from scrollphathd.fonts import misaki_minchoc.py`
 で日本語フォントが呼び出せます。
 
-
 ## 使用例
 
 * koedo.py
@@ -25,17 +24,18 @@ Scroll pHAT HD を使うスクリプトと同じディレクトリに misaki_got
 * startup-koedo.sh
     * Scroll pHAT HD が接続されていたら koedo.py を呼び出す Shell Script です。cron で @reboot 指定で呼ぶなどの利用が便利でしょう。
     
-## 上級者向けツール
+## 制限事項
+
+U+3001 以降の文字しか収録していません。つまり1バイト英数字がありません。これらの文字列を食わせても表示が出ません。
+
+## BDF フォントから生成するツール (上級者向け)
+convertor/ ディレクトリに収録。
 * bdfuni2pyfont.pl
     * [モナーフォント](http://monafont.sourceforge.net)付属の `jis2unicode` で文字コードを変換した美咲フォントBDFファイルを食わせて `misaki_(gothic|mincho).py` を作成するPerlスクリプトです。
 * bdfjis2pyfont.pl
     * 素の美咲フォントBDFファイルを食わせて `misaki_(gothic|mincho).py` を作成するPerlスクリプトです。
     * JIS X 0208 から外れる文字列（丸付き数字①や組み文字㍼など）は存在しない文字として 0x0000FFFD に変換されてしまいます。
     * 美咲フォントは JIS X 0213 からも外れる文字があるため、Encode::JIS2K を使っても完全には変換できません。
-
-## 制限事項
-
-U+3001 以降の文字しか収録していません。つまり1バイト英数字がありません。これらの文字列を食わせても表示が出ません。
 
 ## VS.
 
